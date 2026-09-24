@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, Variants } from 'framer-motion';
 import { PERSONAL_INFO } from '../data/portfolioData';
 import { ReadingTimeBadge } from './ReadingTimeBadge';
 import {
@@ -29,6 +30,25 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
     setTimeout(() => setCopiedField(null), 2000);
   };
 
+  const containerVariants: Variants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.15
+      }
+    }
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 22 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.65, ease: 'easeOut' }
+    }
+  };
+
   return (
     <section id="about" className="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-28 border-b border-slate-200/80 dark:border-slate-800/60">
       {/* Background radial accent glow */}
@@ -40,9 +60,14 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-center">
           {/* Left Column: Typographic impact & bio */}
-          <div className="lg:col-span-7">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="lg:col-span-7"
+          >
             {/* Status kicker - unboxed text with typographic separator */}
-            <div className="mb-4 flex flex-wrap items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-400">
+            <motion.div variants={itemVariants} className="mb-4 flex flex-wrap items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-400">
               <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
               <span>Available for Software Engineering Roles</span>
               <span aria-hidden="true" className="text-slate-400 dark:text-slate-600">·</span>
@@ -52,22 +77,34 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
               </span>
               <span aria-hidden="true" className="text-slate-400 dark:text-slate-600">·</span>
               <ReadingTimeBadge targetId="about" defaultMinutes={1} />
-            </div>
+            </motion.div>
 
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl lg:text-6xl font-display leading-[1.1] text-balance">
+            <motion.h1
+              variants={itemVariants}
+              className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl lg:text-6xl font-display leading-[1.1] text-balance"
+            >
               {PERSONAL_INFO.name}
-            </h1>
+            </motion.h1>
 
-            <p className="mt-3 text-lg sm:text-xl font-medium text-indigo-600 dark:text-indigo-400">
+            <motion.p
+              variants={itemVariants}
+              className="mt-3 text-lg sm:text-xl font-medium text-indigo-600 dark:text-indigo-400"
+            >
               {PERSONAL_INFO.displayRole}
-            </p>
+            </motion.p>
 
-            <p className="mt-5 text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-300 max-w-2xl">
+            <motion.p
+              variants={itemVariants}
+              className="mt-5 text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-300 max-w-2xl"
+            >
               {PERSONAL_INFO.summary}
-            </p>
+            </motion.p>
 
             {/* Quick Proof Highlights */}
-            <div className="mt-6 flex flex-wrap items-center gap-y-2 gap-x-4 text-xs sm:text-sm text-slate-600 dark:text-slate-400 border-l-2 border-indigo-500/50 pl-4 py-1">
+            <motion.div
+              variants={itemVariants}
+              className="mt-6 flex flex-wrap items-center gap-y-2 gap-x-4 text-xs sm:text-sm text-slate-600 dark:text-slate-400 border-l-2 border-indigo-500/50 pl-4 py-1"
+            >
               <div>
                 <span className="font-semibold text-slate-900 dark:text-slate-200">IEEE TQCEBT’26</span>
                 <span className="ml-1 text-slate-500 dark:text-slate-400">Published Author</span>
@@ -82,10 +119,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
                 <span className="font-semibold text-slate-900 dark:text-slate-200">32+ AI Certifications</span>
                 <span className="ml-1 text-slate-500 dark:text-slate-400">Infosys & Industry</span>
               </div>
-            </div>
+            </motion.div>
 
             {/* Prominent Action Buttons */}
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+            <motion.div variants={itemVariants} className="mt-8 flex flex-wrap items-center gap-3">
               <a
                 href="#projects"
                 className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-colors"
@@ -108,10 +145,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
               >
                 <span>Get in Touch</span>
               </a>
-            </div>
+            </motion.div>
 
             {/* Prominent Social Profiles & Quick Contact Row */}
-            <div className="mt-10 border-t border-slate-200 dark:border-slate-800/80 pt-6">
+            <motion.div variants={itemVariants} className="mt-10 border-t border-slate-200 dark:border-slate-800/80 pt-6">
               <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">
                 Connect & Verify Profiles
               </div>
@@ -170,11 +207,16 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
                   </button>
                 </div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Right Column: Architectural Engineering Terminal Card */}
-          <div className="lg:col-span-5">
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.35, ease: 'easeOut' }}
+            className="lg:col-span-5"
+          >
             <div className="relative rounded-2xl border border-slate-800 bg-slate-900/95 p-6 shadow-2xl backdrop-blur-xl">
               {/* Header bar of window */}
               <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
@@ -272,7 +314,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

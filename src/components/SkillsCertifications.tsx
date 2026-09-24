@@ -9,7 +9,7 @@ interface TechTag {
   name: string;
   category: string;
   level: string;
-  related: string[]; // ids of related technologies
+  related: string[];
 }
 
 const ALL_TECH_TAGS: TechTag[] = [
@@ -58,17 +58,22 @@ export const SkillsCertifications: React.FC = () => {
   const [hoveredTechId, setHoveredTechId] = useState<string | null>(null);
   const [selectedTagCategory, setSelectedTagCategory] = useState<string>('All');
 
-  // Mouse interaction for subtle 3D tilt effect on the tag cloud container
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [6, -6]), { stiffness: 120, damping: 20 });
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-6, 6]), { stiffness: 120, damping: 20 });
+  const rotateX = useSpring(useTransform(mouseY, [-200, 200], [4, -4]), {
+    stiffness: 200,
+    damping: 25
+  });
+  const rotateY = useSpring(useTransform(mouseX, [-200, 200], [-4, 4]), {
+    stiffness: 200,
+    damping: 25
+  });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
     mouseX.set(x);
     mouseY.set(y);
   };
@@ -76,17 +81,20 @@ export const SkillsCertifications: React.FC = () => {
   const handleMouseLeave = () => {
     mouseX.set(0);
     mouseY.set(0);
-    setHoveredTechId(null);
   };
 
-  // Determine active related technologies
   const hoveredTag = ALL_TECH_TAGS.find((t) => t.id === hoveredTechId);
-  const relatedIds = hoveredTag ? [hoveredTag.id, ...hoveredTag.related] : [];
 
-  const tagCategories = ['All', 'Language', 'AI & Deep Learning', 'Backend', 'Frontend', 'Mobile', 'Database'];
+  const tagCategories = ['All', 'Language', 'AI', 'Backend', 'Frontend', 'Mobile', 'Database'];
 
   const filteredTags = ALL_TECH_TAGS.filter((tag) => {
     if (selectedTagCategory === 'All') return true;
+    if (selectedTagCategory === 'Language') return tag.category.includes('Language');
+    if (selectedTagCategory === 'AI') return tag.category.includes('AI') || tag.category.includes('Vision');
+    if (selectedTagCategory === 'Backend') return tag.category.includes('Backend');
+    if (selectedTagCategory === 'Frontend') return tag.category.includes('Frontend') || tag.category.includes('Design');
+    if (selectedTagCategory === 'Mobile') return tag.category.includes('Mobile');
+    if (selectedTagCategory === 'Database') return tag.category.includes('Database');
     return tag.category.toLowerCase().includes(selectedTagCategory.toLowerCase());
   });
 
@@ -98,7 +106,7 @@ export const SkillsCertifications: React.FC = () => {
       : CERTIFICATIONS_DATA.filter((c) => c.category === activeCertCategory);
 
   return (
-    <section id="skills" className="py-20 border-b border-slate-200/80 bg-white dark:border-slate-800/60 dark:bg-slate-950 transition-colors duration-200">
+    <section id="skills" className="py-24 border-b border-slate-200/80 bg-white dark:border-slate-800/60 dark:bg-slate-950 transition-colors duration-200">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="pb-10 border-b border-slate-200 dark:border-slate-800/80">
@@ -118,7 +126,13 @@ export const SkillsCertifications: React.FC = () => {
         </div>
 
         {/* Interactive Framer-Motion Tag Cloud */}
-        <div className="mt-12">
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-50px' }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-12"
+        >
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
               <div className="flex items-center gap-2 text-xs font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider mb-1">
@@ -145,8 +159,8 @@ export const SkillsCertifications: React.FC = () => {
                   onClick={() => setSelectedTagCategory(cat)}
                   className={`px-2.5 py-1 text-xs font-medium rounded-lg transition-colors cursor-pointer ${
                     selectedTagCategory === cat
-                      ? 'bg-indigo-600 text-white shadow-sm'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800/60'
+                      ? 'bg-indigo-600 text-white shadow-xs'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                   }`}
                 >
                   {cat}
@@ -155,40 +169,31 @@ export const SkillsCertifications: React.FC = () => {
             </div>
           </div>
 
-          {/* Interactive Cloud Container with 3D Mouse Parallax */}
           <motion.div
-            style={{ rotateX, rotateY, transformPerspective: 1000 }}
+            style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            className="relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 via-white to-slate-50/80 p-8 shadow-sm dark:border-slate-800 dark:bg-gradient-to-br dark:from-slate-900/90 dark:via-slate-950 dark:to-slate-900/80 dark:shadow-2xl transition-colors"
+            className="rounded-3xl border border-slate-200 bg-slate-50/70 p-6 sm:p-8 dark:border-slate-800 dark:bg-slate-900/40 backdrop-blur-md shadow-lg transition-colors"
           >
-            {/* Ambient Background Grid Pattern */}
-            <div
-              className="pointer-events-none absolute inset-0 opacity-[0.03] dark:opacity-[0.07]"
-              style={{
-                backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
-                backgroundSize: '20px 20px'
-              }}
-            />
-
-            {/* Tag Cloud Items */}
-            <div className="flex flex-wrap items-center justify-center gap-3 py-4">
-              {filteredTags.map((tech) => {
+            <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3">
+              {filteredTags.map((tech, index) => {
                 const isHovered = hoveredTechId === tech.id;
-                const isRelated = hoveredTechId !== null && relatedIds.includes(tech.id);
-                const isDimmed = hoveredTechId !== null && !isRelated;
+                const isRelated = hoveredTag?.related.includes(tech.id);
 
                 return (
                   <motion.button
                     key={tech.id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    onClick={() => setHoveredTechId(isHovered ? null : tech.id)}
                     onMouseEnter={() => setHoveredTechId(tech.id)}
-                    onClick={() => setHoveredTechId(tech.id === hoveredTechId ? null : tech.id)}
-                    animate={{
-                      scale: isHovered ? 1.12 : isRelated ? 1.04 : isDimmed ? 0.92 : 1,
-                      opacity: isDimmed ? 0.35 : 1,
-                      y: isHovered ? -4 : 0
+                    whileHover={{
+                      scale: 1.08,
+                      y: -2,
+                      transition: { type: 'spring', stiffness: 400, damping: 25 }
                     }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                    transition={{ duration: 0.35, delay: (index % 8) * 0.04 }}
                     className={`relative flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-medium cursor-pointer transition-colors duration-200 ${
                       isHovered
                         ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/25 ring-2 ring-indigo-400'
@@ -250,18 +255,27 @@ export const SkillsCertifications: React.FC = () => {
               </button>
             </div>
           </motion.div>
-        </div>
+        </motion.div>
 
-        {/* Skills Matrix by Domain */}
+        {/* Skills Matrix by Domain - One by one staggered card reveals */}
         <div className="mt-16">
           <h3 className="text-lg font-bold text-slate-900 dark:text-white font-display mb-6">
             Domain Breakdowns
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {SKILLS_DATA.map((group) => (
-              <div
+            {SKILLS_DATA.map((group, groupIdx) => (
+              <motion.div
                 key={group.category}
-                className="rounded-2xl border border-slate-200 bg-slate-50/60 p-6 flex flex-col justify-between hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:border-slate-700 transition-colors"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{
+                  duration: 0.6,
+                  delay: groupIdx * 0.12,
+                  ease: [0.16, 1, 0.3, 1]
+                }}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                className="rounded-2xl border border-slate-200 bg-slate-50/60 p-6 flex flex-col justify-between hover:border-indigo-300/70 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/60 dark:hover:border-indigo-500/30 transition-colors"
               >
                 <div>
                   <div className="flex items-center gap-2 mb-4">
@@ -285,7 +299,7 @@ export const SkillsCertifications: React.FC = () => {
                     ))}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -323,9 +337,18 @@ export const SkillsCertifications: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredCerts.map((cert, idx) => (
-              <div
+              <motion.div
                 key={idx}
-                className="flex items-start justify-between rounded-xl border border-slate-200 bg-white p-4 hover:border-slate-300 hover:shadow-sm dark:border-slate-800 dark:bg-slate-900/40 dark:hover:border-slate-700 dark:hover:bg-slate-900/80 transition-all"
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-30px' }}
+                transition={{
+                  duration: 0.5,
+                  delay: (idx % 6) * 0.08,
+                  ease: [0.16, 1, 0.3, 1]
+                }}
+                whileHover={{ y: -3, transition: { duration: 0.2 } }}
+                className="flex items-start justify-between rounded-xl border border-slate-200 bg-white p-4 hover:border-indigo-300/70 hover:shadow-sm dark:border-slate-800 dark:bg-slate-900/40 dark:hover:border-indigo-500/30 dark:hover:bg-slate-900/80 transition-all"
               >
                 <div>
                   <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
@@ -343,7 +366,7 @@ export const SkillsCertifications: React.FC = () => {
                   )}
                 </div>
                 <CheckCircle className="h-4 w-4 text-emerald-500 dark:text-emerald-400 shrink-0 ml-2 mt-0.5" />
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>

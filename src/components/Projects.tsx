@@ -168,15 +168,20 @@ export const Projects: React.FC = () => {
                 <motion.div
                   key={project.id}
                   layout
-                  initial={{ opacity: 0, y: 24, scale: 0.98 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  initial={{ opacity: 0, y: 32, scale: 0.96 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, margin: '-50px' }}
                   exit={{ opacity: 0, y: 20, scale: 0.98 }}
                   whileHover={{
-                    y: -5,
-                    boxShadow: '0 20px 30px -10px rgba(0, 0, 0, 0.12), 0 10px 15px -5px rgba(99, 102, 241, 0.08)',
-                    transition: { duration: 0.22, ease: 'easeOut' }
+                    y: -6,
+                    boxShadow: '0 20px 30px -10px rgba(0, 0, 0, 0.12), 0 10px 15px -5px rgba(99, 102, 241, 0.12)',
+                    transition: { duration: 0.2, ease: 'easeOut' }
                   }}
-                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{
+                    duration: 0.6,
+                    delay: (idx % 2) * 0.12,
+                    ease: [0.16, 1, 0.3, 1]
+                  }}
                   className="group relative flex flex-col justify-between rounded-2xl border border-slate-200 bg-slate-50/50 p-6 sm:p-7 transition-colors hover:border-indigo-300/80 hover:bg-white dark:border-slate-800 dark:bg-slate-900/60 dark:hover:border-indigo-500/40 dark:hover:bg-slate-900/90"
                 >
                   <div>

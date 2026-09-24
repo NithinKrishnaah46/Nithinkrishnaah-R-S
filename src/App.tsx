@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
+import { CustomCursor } from './components/CustomCursor';
 import { ScrollProgress } from './components/ScrollProgress';
 import { ParallaxBackground } from './components/ParallaxBackground';
 import { FadeInSection } from './components/FadeInSection';
@@ -11,6 +12,8 @@ import { ExperienceEducation } from './components/ExperienceEducation';
 import { SkillsCertifications } from './components/SkillsCertifications';
 import { ContactSection } from './components/ContactSection';
 import { ResumeModal } from './components/ResumeModal';
+import { ScrollToTopButton } from './components/ScrollToTopButton';
+import { PerformanceMonitor } from './components/PerformanceMonitor';
 import { Footer } from './components/Footer';
 
 function PortfolioContent() {
@@ -18,6 +21,9 @@ function PortfolioContent() {
 
   return (
     <div className="relative min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 flex flex-col selection:bg-indigo-500 selection:text-white transition-colors duration-200">
+      {/* Subtle Pro Custom Cursor (Pointer/Desktop devices) */}
+      <CustomCursor />
+
       {/* Scroll-triggered multi-layer parallax background */}
       <ParallaxBackground />
 
@@ -59,6 +65,12 @@ function PortfolioContent() {
           <Footer onOpenResume={() => setIsResumeModalOpen(true)} />
         </FadeInSection>
       </div>
+
+      {/* Real-time Toggleable Performance Telemetry Monitor (bottom-left) */}
+      <PerformanceMonitor />
+
+      {/* Floating Action Button: Scroll to Top (bottom-right) */}
+      <ScrollToTopButton />
 
       {/* Digital Resume & CV Modal */}
       <ResumeModal
