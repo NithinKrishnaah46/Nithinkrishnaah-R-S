@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nithinkrishnaah R S — Full-Stack & AI Engineer Portfolio</title>
+    <meta name="description" content="Portfolio of Nithinkrishnaah R S, Computer Science Engineering graduate specializing in Full-Stack Development (React, Node.js, FastAPI), Mobile (Kotlin/Android), and AI/Deep Learning with research publication." />
+    <meta property="og:title" content="Nithinkrishnaah R S — Full-Stack & AI Engineer Portfolio" />
+    <meta property="og:description" content="Portfolio of Nithinkrishnaah R S, Computer Science Engineering graduate specializing in Full-Stack Development (React, Node.js, FastAPI), Mobile (Kotlin/Android), and AI/Deep Learning with research publication." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+      (function() {
+        try {
+          var stored = localStorage.getItem('nithinkrishnaah_theme');
+          var isDark = stored ? stored === 'dark' : (window.matchMedia ? !window.matchMedia('(prefers-color-scheme: light)').matches : true);
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+          }
+        } catch (e) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 antialiased selection:bg-indigo-500 selection:text-white min-h-screen transition-colors duration-300">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
