@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { PERSONAL_INFO } from '../data/portfolioData';
 import { ContactMessage } from '../types';
 import { ReadingTimeBadge } from './ReadingTimeBadge';
+import { useSocialModal } from '../context/SocialModalContext';
 import {
   Mail,
   Phone,
@@ -19,6 +20,7 @@ import {
 } from 'lucide-react';
 
 export const ContactSection: React.FC = () => {
+  const { openProfile } = useSocialModal();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -227,35 +229,35 @@ export const ContactSection: React.FC = () => {
               </h4>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <a
-                  href={PERSONAL_INFO.socials.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 hover:border-blue-400 hover:shadow-sm dark:border-slate-800 dark:bg-slate-950/60 dark:hover:border-blue-500/50 dark:hover:bg-slate-900 transition-all group"
+                <button
+                  type="button"
+                  onClick={() => openProfile('linkedin')}
+                  title="Inspect LinkedIn Profile & Credentials"
+                  className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 hover:border-blue-400 hover:shadow-sm dark:border-slate-800 dark:bg-slate-950/60 dark:hover:border-blue-500/50 dark:hover:bg-slate-900 transition-all group text-left cursor-pointer"
                 >
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-600/20 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                     <Linkedin className="h-4 w-4" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-xs font-semibold text-slate-800 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-300">LinkedIn</div>
-                    <div className="text-[11px] text-slate-500 truncate">nithinkrishnaah</div>
+                    <div className="text-xs font-semibold text-slate-800 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-300">LinkedIn Profile</div>
+                    <div className="text-[11px] text-slate-500 truncate">Click to inspect details</div>
                   </div>
-                </a>
+                </button>
 
-                <a
-                  href={PERSONAL_INFO.socials.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 hover:border-slate-400 hover:shadow-sm dark:border-slate-800 dark:bg-slate-950/60 dark:hover:border-slate-700 dark:hover:bg-slate-900 transition-all group"
+                <button
+                  type="button"
+                  onClick={() => openProfile('github')}
+                  title="Inspect GitHub Repositories & Code"
+                  className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 hover:border-slate-400 hover:shadow-sm dark:border-slate-800 dark:bg-slate-950/60 dark:hover:border-slate-700 dark:hover:bg-slate-900 transition-all group text-left cursor-pointer"
                 >
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200 group-hover:bg-slate-900 group-hover:text-white transition-colors">
                     <Github className="h-4 w-4" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-xs font-semibold text-slate-800 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white">GitHub</div>
-                    <div className="text-[11px] text-slate-500 truncate">nithinkrishnaah</div>
+                    <div className="text-xs font-semibold text-slate-800 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white">GitHub Repos</div>
+                    <div className="text-[11px] text-slate-500 truncate">Click to view repositories</div>
                   </div>
-                </a>
+                </button>
               </div>
 
               <div className="mt-4 flex items-center gap-2 text-[11px] text-slate-500">

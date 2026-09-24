@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
+import { SocialModalProvider } from './context/SocialModalContext';
 import { CustomCursor } from './components/CustomCursor';
 import { ScrollProgress } from './components/ScrollProgress';
 import { ParallaxBackground } from './components/ParallaxBackground';
@@ -84,7 +85,9 @@ function PortfolioContent() {
 export default function App() {
   return (
     <ThemeProvider>
-      <PortfolioContent />
+      <SocialModalProvider>
+        <PortfolioContent />
+      </SocialModalProvider>
     </ThemeProvider>
   );
 }

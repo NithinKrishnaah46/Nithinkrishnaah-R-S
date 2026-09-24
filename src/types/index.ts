@@ -5,6 +5,14 @@ export interface SocialLink {
   handle: string;
 }
 
+export interface ProjectFile {
+  name: string;
+  type: 'code' | 'config' | 'doc';
+  language?: string;
+  description: string;
+  codeSnippet: string;
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -18,6 +26,15 @@ export interface Project {
   demoUrl?: string;
   architectureDetails: string;
   featured: boolean;
+  repoStats?: {
+    stars: number;
+    forks: number;
+    watchers: number;
+    branches: number;
+    commits: number;
+    license: string;
+  };
+  files?: ProjectFile[];
 }
 
 export interface ExperienceItem {

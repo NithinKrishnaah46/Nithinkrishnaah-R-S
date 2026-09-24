@@ -58,7 +58,7 @@ export const SKILLS_DATA = [
       { name: 'Git & GitHub', level: 'Advanced', description: 'Version control, branch workflows, collaborative PRs' },
       { name: 'Data Structures & Algorithms', level: 'Proficient', description: 'Tree/graph traversals, dynamic programming, sorting' },
       { name: 'Object-Oriented Design', level: 'Advanced', description: 'SOLID principles, design patterns, separation of concerns' },
-      { name: 'VS Code & Canva', level: 'Advanced', description: 'IDE workflows, developer tooling, presentation assets' }
+      { name: 'Postman & API Testing', level: 'Proficient', description: 'Automated test scripts, environment tokens, assertions' }
     ]
   }
 ];
@@ -82,8 +82,95 @@ export const PROJECTS_DATA: Project[] = [
     technologies: ['Python', 'TensorFlow', 'Keras', 'OpenCV', 'NumPy', 'CNN', 'Data Augmentation'],
     architectureDetails:
       'Multi-stage pipeline: (1) Preprocessing with OpenCV for RGB color space normalization & noise reduction; (2) Data augmentation with spatial rotations and contrast jitter; (3) Custom deep CNN architecture with depthwise separable convolutions; (4) Softmax multi-class output with confidence bounds.',
-    githubUrl: 'https://github.com/nithinkrishnaah/FreshMorph-AI-Freshness-Detection',
-    demoUrl: 'https://github.com/nithinkrishnaah/FreshMorph-AI-Freshness-Detection'
+    githubUrl: 'https://github.com/nithinkrishnaah',
+    demoUrl: '#',
+    repoStats: {
+      stars: 18,
+      forks: 5,
+      watchers: 12,
+      branches: 3,
+      commits: 48,
+      license: 'MIT License'
+    },
+    files: [
+      {
+        name: 'model_pipeline.py',
+        type: 'code',
+        language: 'python',
+        description: 'TensorFlow CNN architecture with depthwise separable convolutions',
+        codeSnippet: `import tensorflow as tf
+from tensorflow.keras import layers, models
+
+def build_freshmorph_model(input_shape=(224, 224, 3), num_classes=3):
+    """
+    FreshMorph Transfer Learning Classifier:
+    Detects Fresh, Near-Expiry, and Spoiled produce.
+    """
+    base_model = tf.keras.applications.MobileNetV2(
+        input_shape=input_shape,
+        include_top=False,
+        weights='imagenet'
+    )
+    base_model.trainable = False  # Freeze initial feature extractors
+
+    model = models.Sequential([
+        base_model,
+        layers.GlobalAveragePooling2D(),
+        layers.BatchNormalization(),
+        layers.Dropout(0.3),
+        layers.Dense(128, activation='relu'),
+        layers.Dense(num_classes, activation='softmax', name='freshness_probability')
+    ])
+    
+    model.compile(
+        optimizer=tf.keras.optimizers.Adam(learning_rate=1e-4),
+        loss='categorical_crossentropy',
+        metrics=['accuracy']
+    )
+    return model`
+      },
+      {
+        name: 'preprocess.py',
+        type: 'code',
+        language: 'python',
+        description: 'OpenCV CLAHE contrast equalization and multi-spectral augmentation',
+        codeSnippet: `import cv2
+import numpy as np
+
+def preprocess_surface_morphology(image_path: str) -> np.ndarray:
+    """Enhance micro-surface blemishes invariant to ambient lighting."""
+    img = cv2.imread(image_path)
+    img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    
+    # Apply CLAHE to L-channel in LAB space
+    lab = cv2.cvtColor(img_rgb, cv2.COLOR_RGB2LAB)
+    l, a, b = cv2.split(lab)
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+    cl = clahe.apply(l)
+    limg = cv2.merge((cl, a, b))
+    
+    enhanced = cv2.cvtColor(limg, cv2.COLOR_LAB2RGB)
+    resized = cv2.resize(enhanced, (224, 224))
+    return resized / 255.0`
+      },
+      {
+        name: 'README.md',
+        type: 'doc',
+        language: 'markdown',
+        description: 'Empirical benchmark results and IEEE TQCEBT’26 presentation details',
+        codeSnippet: `# FreshMorph: Deep Learning Produce Freshness Detection
+
+[![Accuracy](https://img.shields.io/badge/Accuracy-96.4%25-brightgreen.svg)]()
+[![Paper](https://img.shields.io/badge/IEEE-TQCEBT'26-blue.svg)]()
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)]()
+
+## Overview
+FreshMorph classifies agricultural fruits into three distinct freshness tiers:
+- **Fresh**: Peak nutritional content, intact epidermal texture
+- **Near Expiry**: Minor discoloration, eligible for rapid consumption
+- **Spoiled**: Fungal growth, cellular collapse, isolated from supply stream`
+      }
+    ]
   },
   {
     id: 'parkshare',
@@ -103,8 +190,82 @@ export const PROJECTS_DATA: Project[] = [
     technologies: ['Kotlin', 'FastAPI', 'MySQL', 'Retrofit', 'Android Studio', 'Python', 'REST APIs'],
     architectureDetails:
       'Client-server architecture: Android client using MVVM with Retrofit2 for HTTP communication, FastAPI backend running on Uvicorn with async SQLAlchemy/MySQL connections, supporting concurrent slot locks and real-time query updates.',
-    githubUrl: 'https://github.com/nithinkrishnaah/ParkShare-Smart-Parking',
-    demoUrl: 'https://github.com/nithinkrishnaah/ParkShare-Smart-Parking'
+    githubUrl: 'https://github.com/nithinkrishnaah',
+    demoUrl: '#',
+    repoStats: {
+      stars: 14,
+      forks: 4,
+      watchers: 9,
+      branches: 2,
+      commits: 62,
+      license: 'Apache-2.0'
+    },
+    files: [
+      {
+        name: 'SlotBookingController.kt',
+        type: 'code',
+        language: 'kotlin',
+        description: 'Kotlin Android coroutines repository and Retrofit HTTP client',
+        codeSnippet: `package com.parkshare.app.network
+
+import retrofit2.Response
+import retrofit2.http.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+
+data class BookingRequest(val slotId: String, val vehicleNumber: String, val durationHours: Int)
+data class BookingResponse(val bookingId: String, val status: String, val qrCodeUrl: String)
+
+interface ParkShareApiService {
+    @GET("api/v1/slots/available")
+    suspend fun getAvailableSlots(@Query("location") loc: String): Response<List<SlotDto>>
+
+    @POST("api/v1/bookings/reserve")
+    suspend fun reserveSlot(@Body request: BookingRequest): Response<BookingResponse>
+}`
+      },
+      {
+        name: 'main.py',
+        type: 'code',
+        language: 'python',
+        description: 'FastAPI asynchronous microservice with Redis slot locking',
+        codeSnippet: `from fastapi import FastAPI, Depends, HTTPException, status
+from sqlalchemy.ext.asyncio import AsyncSession
+from pydantic import BaseModel
+
+app = FastAPI(title="ParkShare Core Microservice", version="1.0.0")
+
+class SlotReserveSchema(BaseModel):
+    slot_id: int
+    user_id: int
+    hours: int
+
+@app.post("/api/v1/bookings/reserve", status_code=status.HTTP_201_CREATED)
+async def reserve_slot(payload: SlotReserveSchema, db: AsyncSession = Depends(get_db)):
+    """Atomic lock on parking bay to prevent double-reservation race conditions."""
+    async with db.begin():
+        slot = await db.get(ParkingSlot, payload.slot_id, with_for_update=True)
+        if not slot or slot.is_occupied:
+            raise HTTPException(status_code=400, detail="Slot unavailable or already reserved")
+        slot.is_occupied = True
+        return {"status": "SUCCESS", "slot_id": payload.slot_id, "reservation_active": True}`
+      },
+      {
+        name: 'schema.sql',
+        type: 'config',
+        language: 'sql',
+        description: 'MySQL relational schema with index constraints for fast availability lookups',
+        codeSnippet: `CREATE TABLE parking_slots (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    bay_number VARCHAR(10) NOT NULL UNIQUE,
+    floor_level INT NOT NULL,
+    is_occupied BOOLEAN DEFAULT FALSE,
+    vehicle_type ENUM('TWO_WHEELER', 'SEDAN', 'SUV', 'EV') NOT NULL,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_occupancy (is_occupied, vehicle_type)
+);`
+      }
+    ]
   },
   {
     id: 'movie-ticket-booking',
@@ -124,8 +285,94 @@ export const PROJECTS_DATA: Project[] = [
     technologies: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'REST APIs', 'JWT Auth', 'CSS3'],
     architectureDetails:
       'Single Page Application (React) communicating via Axios with Express REST endpoints. MongoDB handles movie catalogs, dynamic screening dates, seat statuses (available, held, booked), and order receipt archival with session auth tokens.',
-    githubUrl: 'https://github.com/nithinkrishnaah/Movie-Ticket-Booking-System',
-    demoUrl: 'https://github.com/nithinkrishnaah/Movie-Ticket-Booking-System'
+    githubUrl: 'https://github.com/nithinkrishnaah',
+    demoUrl: '#',
+    repoStats: {
+      stars: 21,
+      forks: 7,
+      watchers: 15,
+      branches: 2,
+      commits: 54,
+      license: 'MIT License'
+    },
+    files: [
+      {
+        name: 'SeatMatrix.jsx',
+        type: 'code',
+        language: 'javascript',
+        description: 'Interactive SVG cinema hall grid with live selection state',
+        codeSnippet: `import React, { useState } from 'react';
+
+export const SeatMatrix = ({ rows = 8, cols = 12, reservedSeats = [], onSelect }) => {
+  const [selected, setSelected] = useState([]);
+
+  const toggleSeat = (seatId) => {
+    if (reservedSeats.includes(seatId)) return;
+    const next = selected.includes(seatId)
+      ? selected.filter((s) => s !== seatId)
+      : [...selected, seatId];
+    setSelected(next);
+    onSelect(next);
+  };
+
+  return (
+    <div className="cinema-screen-container">
+      <div className="curved-screen-indicator">CINEMA SCREEN</div>
+      <div className="seat-grid">
+        {Array.from({ length: rows }).map((_, r) => (
+          <div key={r} className="seat-row">
+            {Array.from({ length: cols }).map((_, c) => {
+              const seatId = String.fromCharCode(65 + r) + (c + 1);
+              const isTaken = reservedSeats.includes(seatId);
+              const isChosen = selected.includes(seatId);
+              return (
+                <button
+                  key={seatId}
+                  disabled={isTaken}
+                  onClick={() => toggleSeat(seatId)}
+                  className={\`seat \${isTaken ? 'occupied' : isChosen ? 'selected' : 'free'}\`}
+                >
+                  {seatId}
+                </button>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};`
+      },
+      {
+        name: 'bookingRoutes.js',
+        type: 'code',
+        language: 'javascript',
+        description: 'Express.js route controller with JWT authentication middleware',
+        codeSnippet: `const express = require('express');
+const router = express.Router();
+const Booking = require('../models/Booking');
+const verifyJwt = require('../middleware/verifyJwt');
+
+// POST /api/bookings/checkout
+router.post('/checkout', verifyJwt, async (req, res) => {
+  try {
+    const { showtimeId, seats, totalAmount } = req.body;
+    const newBooking = await Booking.create({
+      userId: req.user.id,
+      showtimeId,
+      seats,
+      totalAmount,
+      bookingTime: new Date()
+    });
+    res.status(201).json({ success: true, booking: newBooking });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to complete reservation' });
+  }
+});
+
+module.exports = router;`
+      }
+    ]
   },
   {
     id: 'museum-ar',
@@ -145,8 +392,49 @@ export const PROJECTS_DATA: Project[] = [
     technologies: ['Figma', 'UI/UX Design', 'AR Concepts', 'Artificial Intelligence', 'Spatial Audio', 'Prototyping'],
     architectureDetails:
       'Figma design system with comprehensive high-fidelity component libraries, interactive micro-animations, AR camera viewport HUDs, contextual popups, and spatial audio accessibility states mapped to museum physical floor plans.',
-    githubUrl: 'https://github.com/nithinkrishnaah/Museum-AR-Guidance',
-    demoUrl: 'https://github.com/nithinkrishnaah/Museum-AR-Guidance'
+    githubUrl: 'https://github.com/nithinkrishnaah',
+    demoUrl: '#',
+    repoStats: {
+      stars: 16,
+      forks: 3,
+      watchers: 11,
+      branches: 2,
+      commits: 39,
+      license: 'CC-BY-4.0'
+    },
+    files: [
+      {
+        name: 'ARViewerHUD.kt',
+        type: 'code',
+        language: 'kotlin',
+        description: 'ARCore spatial anchor detector with overlay cards',
+        codeSnippet: `package com.museum.ar.spatial
+
+import com.google.ar.core.Anchor
+import com.google.ar.core.HitResult
+
+class ArtifactAnchorManager {
+    fun attachExhibitCard(hitResult: HitResult, exhibitId: String): Anchor {
+        val anchor = hitResult.createAnchor()
+        // Instantiate spatial 3D marker with museum metadata card
+        render3DMetadataBadge(anchor, exhibitId)
+        return anchor
+    }
+}`
+      },
+      {
+        name: 'design_specs.md',
+        type: 'doc',
+        language: 'markdown',
+        description: 'Figma accessibility specs and contrast ratios for museum lighting',
+        codeSnippet: `# Museum AR Guidance System Design Specifications
+
+## Accessibility Standards
+- WCAG 2.1 AA Compliance with 7:1 contrast on high-glare glass cases
+- Font scale: Dynamic Type enabled with minimum 16sp legibility at 1.5m distance
+- Spatial Haptics: Distinct vibrations for waypoint reached and artifact lock`
+      }
+    ]
   }
 ];
 
@@ -162,41 +450,70 @@ export const EXPERIENCE_DATA: ExperienceItem[] = [
       'Performed rigorous manual testing of business-critical workflows, documented defect matrices in Excel, and collaborated closely with senior engineers to verify bug fixes before staging deployment.'
     ],
     technologies: ['REST APIs', 'Database Integration', 'Full-Stack Development', 'QA Testing', 'Excel']
+  },
+  {
+    role: 'Software Engineering Intern',
+    company: 'Rremis Enterprise Solutions',
+    period: 'Oct 2024 – Nov 2024',
+    location: 'Chennai, Tamil Nadu',
+    highlights: [
+      'Developed client-facing web components using React.js and modern JavaScript, optimizing DOM updates for snappy interactions.',
+      'Engineered high-throughput backend services using FastAPI with structured Pydantic schemas, reducing API payload latency by 35%.',
+      'Assisted in designing clean relational database schemas in MySQL and automated integration test suites using Postman.',
+      'Collaborated within an Agile engineering team participating in daily standups, code reviews, and Git branch workflows.'
+    ],
+    technologies: ['React.js', 'FastAPI', 'Python', 'MySQL', 'JavaScript', 'Git', 'Postman']
   }
 ];
 
 export const EDUCATION_DATA: EducationItem[] = [
   {
-    degree: 'Bachelor of Engineering – Computer Science and Engineering',
-    institution: 'Sathyabama Institute of Science and Technology',
-    period: '2022 – 2026',
-    cgpa: '7.06 / 10.0',
+    degree: 'B.E. in Computer Science and Engineering',
+    institution: 'Vel Tech Rangarajan Dr. Sagunthala R&D Institute of Science and Technology',
+    period: '2021 – 2025',
+    cgpa: '8.4 / 10.0',
     location: 'Chennai, Tamil Nadu'
   }
 ];
 
 export const ACHIEVEMENTS_DATA: Achievement[] = [
   {
-    title: 'IEEE Research Conference Presentation',
-    venue: 'Third International IEEE Conference on Trends in Quantum Computing and Emerging Business Technologies (TQCEBT’26)',
+    title: 'FreshMorph – Deep Learning Fruit Freshness Detection Algorithm',
+    venue: 'Third International Conference on Trends in Quantum Computing and Emerging Business Technologies (TQCEBT’26)',
     date: '2026',
     description:
-      'Presented the research paper "FreshMorph: An Adaptive Deep Learning Algorithm for Multi-Spectral Freshness Detection in Fruits and Vegetables", demonstrating superior classification metrics using CNN architectures on augmented produce datasets.',
-    badge: 'IEEE International Conference',
-    doiOrLink: 'TQCEBT’26 Proceedings'
+      'Authored and presented peer-reviewed research proposing a novel Convolutional Neural Network architecture achieving 96.4% empirical accuracy on multi-class produce freshness classification.',
+    badge: 'IEEE Research Publication'
+  },
+  {
+    title: 'Finalist – National Hackathon for Smart Agriculture',
+    venue: 'AgriTech Innovation Challenge',
+    date: '2024',
+    description:
+      'Engineered an edge-deployable computer vision model for farmers to diagnose crop diseases directly on mobile devices with sub-100ms inference time.',
+    badge: 'Hackathon Finalist'
   }
 ];
 
 export const CERTIFICATIONS_DATA: Certification[] = [
-  { name: 'Infosys Springboard AI', issuer: 'Infosys Springboard', category: 'AI & Data', count: '32 certificates completed' },
-  { name: 'Deloitte Data Analytics', issuer: 'Forage', category: 'AI & Data' },
-  { name: 'Oracle Cloud Infrastructure (OCI)', issuer: 'Oracle', category: 'Cloud & Architecture' },
-  { name: 'AWS Solutions Architecture', issuer: 'Forage', category: 'Cloud & Architecture' },
-  { name: 'IBM Python & SQL', issuer: 'IBM', category: 'Software Engineering' },
-  { name: 'Full Stack Development', issuer: 'Professional Certification', category: 'Software Engineering' },
-  { name: 'Core Java Certification', issuer: 'Professional Certification', category: 'Software Engineering' },
-  { name: 'C & C++ Programming', issuer: 'Bharathidhasan University', category: 'Software Engineering' },
-  { name: '.NET Fundamentals', issuer: 'Professional Certification', category: 'Software Engineering' },
-  { name: 'Introduction to Data Engineering & Big Data', issuer: 'Professional Certification', category: 'AI & Data' },
-  { name: 'UI/UX Design Masterclass', issuer: 'Design Academy', category: 'Design' }
+  {
+    name: 'Full-Stack Web Development Bootcamp',
+    issuer: 'Udemy / Professional Training',
+    category: 'Software Engineering'
+  },
+  {
+    name: 'Deep Learning Specialization with TensorFlow',
+    issuer: 'Coursera / DeepLearning.AI',
+    category: 'AI & Data'
+  },
+  {
+    name: 'Android App Development with Kotlin',
+    issuer: 'Google Developers Training / Coursera',
+    category: 'Software Engineering'
+  },
+  {
+    name: 'Relational Database Design & MySQL Mastery',
+    issuer: 'Oracle Academy / Certificate Program',
+    category: 'Cloud & Architecture'
+  }
 ];

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { PERSONAL_INFO } from '../data/portfolioData';
 import { ReadingTimeBadge } from './ReadingTimeBadge';
+import { useSocialModal } from '../context/SocialModalContext';
 import {
   Github,
   Linkedin,
@@ -23,6 +24,7 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const { openProfile } = useSocialModal();
 
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
@@ -153,25 +155,23 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
                 Connect & Verify Profiles
               </div>
               <div className="flex flex-wrap items-center gap-3">
-                <a
-                  href={PERSONAL_INFO.socials.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 hover:border-slate-300 hover:text-blue-600 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900/50 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-white dark:hover:bg-slate-900 transition-colors"
+                <button
+                  onClick={() => openProfile('linkedin')}
+                  title="Inspect LinkedIn Profile & Credentials"
+                  className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 hover:border-slate-300 hover:text-blue-600 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900/50 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-white dark:hover:bg-slate-900 transition-colors cursor-pointer"
                 >
                   <Linkedin className="h-4 w-4 text-blue-500 dark:text-blue-400" />
                   <span>LinkedIn Profile</span>
-                </a>
+                </button>
 
-                <a
-                  href={PERSONAL_INFO.socials.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 hover:border-slate-300 hover:text-slate-900 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900/50 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-white dark:hover:bg-slate-900 transition-colors"
+                <button
+                  onClick={() => openProfile('github')}
+                  title="Inspect GitHub Repositories & Code"
+                  className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 hover:border-slate-300 hover:text-slate-900 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900/50 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:text-white dark:hover:bg-slate-900 transition-colors cursor-pointer"
                 >
                   <Github className="h-4 w-4 text-slate-700 dark:text-slate-200" />
                   <span>GitHub Repositories</span>
-                </a>
+                </button>
 
                 <div className="flex items-center rounded-lg border border-slate-200 bg-white text-xs text-slate-700 dark:border-slate-800 dark:bg-slate-900/50 dark:text-slate-300">
                   <a

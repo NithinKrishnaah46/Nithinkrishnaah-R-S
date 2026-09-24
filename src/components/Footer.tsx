@@ -1,5 +1,6 @@
 import React from 'react';
 import { PERSONAL_INFO } from '../data/portfolioData';
+import { useSocialModal } from '../context/SocialModalContext';
 import { Github, Linkedin, Mail, Phone, ArrowUp } from 'lucide-react';
 
 interface FooterProps {
@@ -7,6 +8,7 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ onOpenResume }) => {
+  const { openProfile } = useSocialModal();
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -34,25 +36,25 @@ export const Footer: React.FC<FooterProps> = ({ onOpenResume }) => {
               Professional Profiles
             </div>
             <div className="flex items-center gap-3">
-              <a
-                href={PERSONAL_INFO.socials.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn Profile"
-                className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 hover:border-blue-400 hover:bg-blue-50 hover:text-blue-600 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-400 dark:hover:border-blue-500/50 dark:hover:bg-blue-600/10 dark:hover:text-blue-400 transition-colors"
+              <button
+                type="button"
+                onClick={() => openProfile('linkedin')}
+                aria-label="Inspect LinkedIn Profile & Credentials"
+                title="Inspect LinkedIn Profile & Credentials"
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 hover:border-blue-400 hover:bg-blue-50 hover:text-blue-600 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-400 dark:hover:border-blue-500/50 dark:hover:bg-blue-600/10 dark:hover:text-blue-400 transition-colors cursor-pointer"
               >
                 <Linkedin className="h-5 w-5" />
-              </a>
+              </button>
 
-              <a
-                href={PERSONAL_INFO.socials.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub Profile"
-                className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-400 dark:hover:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-white transition-colors"
+              <button
+                type="button"
+                onClick={() => openProfile('github')}
+                aria-label="Inspect GitHub Repositories & Code"
+                title="Inspect GitHub Repositories & Code"
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-400 dark:hover:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-white transition-colors cursor-pointer"
               >
                 <Github className="h-5 w-5" />
-              </a>
+              </button>
 
               <a
                 href={`mailto:${PERSONAL_INFO.email}`}

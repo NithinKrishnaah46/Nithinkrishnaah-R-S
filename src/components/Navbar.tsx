@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { PERSONAL_INFO } from '../data/portfolioData';
 import { useTheme } from '../context/ThemeContext';
+import { useSocialModal } from '../context/SocialModalContext';
 import { Github, Linkedin, Mail, Menu, X, FileText, Sun, Moon } from 'lucide-react';
 
 interface NavbarProps {
@@ -12,6 +13,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResume }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const { theme, toggleTheme } = useTheme();
+  const { openProfile } = useSocialModal();
 
   const navLinks = [
     { name: 'About', href: '#about' },
@@ -94,28 +96,30 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResume }) => {
             )}
           </motion.button>
 
-          <motion.a
-            href={PERSONAL_INFO.socials.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub Profile"
+          {/* GitHub: Opens Full Repository & Stats Inspector */}
+          <motion.button
+            onClick={() => openProfile('github')}
+            title="Inspect GitHub Repositories & Code"
+            aria-label="GitHub Profile and Repositories Details"
             whileHover={{ scale: 1.06, y: -1 }}
             whileTap={{ scale: 0.94 }}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-slate-600 hover:border-slate-300 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-400 dark:hover:border-slate-700 dark:hover:text-white transition-colors"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-slate-600 hover:border-slate-300 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-400 dark:hover:border-slate-700 dark:hover:text-white transition-colors cursor-pointer"
           >
             <Github className="h-4 w-4" />
-          </motion.a>
-          <motion.a
-            href={PERSONAL_INFO.socials.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn Profile"
+          </motion.button>
+
+          {/* LinkedIn: Opens Full Verified Profile Details */}
+          <motion.button
+            onClick={() => openProfile('linkedin')}
+            title="Inspect LinkedIn Profile Details"
+            aria-label="LinkedIn Profile Details"
             whileHover={{ scale: 1.06, y: -1 }}
             whileTap={{ scale: 0.94 }}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-slate-600 hover:border-slate-300 hover:text-blue-600 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-400 dark:hover:border-slate-700 dark:hover:text-white transition-colors"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-slate-600 hover:border-slate-300 hover:text-blue-600 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-400 dark:hover:border-slate-700 dark:hover:text-white transition-colors cursor-pointer"
           >
             <Linkedin className="h-4 w-4" />
-          </motion.a>
+          </motion.button>
+
           <motion.button
             onClick={onOpenResume}
             whileHover={{ scale: 1.03, y: -1 }}
@@ -190,24 +194,26 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResume }) => {
           </nav>
           <div className="mt-4 flex items-center justify-between border-t border-slate-200 pt-4 dark:border-slate-800/80">
             <div className="flex items-center gap-4">
-              <a
-                href={PERSONAL_INFO.socials.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  openProfile('github');
+                }}
+                className="flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white cursor-pointer"
               >
                 <Github className="h-3.5 w-3.5" />
                 <span>GitHub</span>
-              </a>
-              <a
-                href={PERSONAL_INFO.socials.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-white"
+              </button>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  openProfile('linkedin');
+                }}
+                className="flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-white cursor-pointer"
               >
                 <Linkedin className="h-3.5 w-3.5" />
                 <span>LinkedIn</span>
-              </a>
+              </button>
             </div>
             <a
               href={`mailto:${PERSONAL_INFO.email}`}
